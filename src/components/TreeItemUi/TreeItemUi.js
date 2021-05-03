@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function TreeItemUi({ nodeId, label, parentId, children }) {
+export default function TreeItemUi({ nodeId, label, parentId, children, labelChangeHandler }) {
     const classes = useStyles();
 
     const addHandler = () => {
@@ -41,9 +41,9 @@ export default function TreeItemUi({ nodeId, label, parentId, children }) {
     }
 
     return (
-        <TreeItem nodeId={nodeId} label={
+        <TreeItem nodeId={nodeId.toString()} label={
             <div className={classes.itemRow}>
-                <TextField size='small' value={label} />
+                <TextField size='small' value={label} onChange={(event) => labelChangeHandler({ nodeId, parentId, value: event.target.value })} />
                 <div>
                     <IconButton className={classes.btnAdd} size='small' onClick={addHandler} >
                         <AddIcon />
