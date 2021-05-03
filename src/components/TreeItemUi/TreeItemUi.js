@@ -9,11 +9,12 @@ import AddIcon from '@material-ui/icons/Add';
 import { indigo } from '@material-ui/core/colors';
 import { red } from '@material-ui/core/colors';
 
-interface INode {
-    id: number,
-    name: string,
-    parentId: number
-}
+// interface INode {
+//     id: number,
+//     name: string,
+//     parentId: number,
+//     children: React.ReactNode
+// }
 
 const useStyles = makeStyles({
     itemRow: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function TreeItemUi({ id, name, parentId }: INode) {
+export default function TreeItemUi({ nodeId, label, parentId, children }) {
     const classes = useStyles();
 
     const addHandler = () => {
@@ -40,9 +41,9 @@ export default function TreeItemUi({ id, name, parentId }: INode) {
     }
 
     return (
-        <TreeItem nodeId={id.toString()} label={
+        <TreeItem nodeId={nodeId} label={
             <div className={classes.itemRow}>
-                <TextField size='small' value={name} />
+                <TextField size='small' value={label} />
                 <div>
                     <IconButton className={classes.btnAdd} size='small' onClick={addHandler} >
                         <AddIcon />
@@ -52,6 +53,8 @@ export default function TreeItemUi({ id, name, parentId }: INode) {
                     </IconButton>
                 </div>
             </div>
-        } />
+        }>
+            {children}
+        </TreeItem>
     )
 }
