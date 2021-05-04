@@ -14,6 +14,7 @@ import TreeItemUi from '../TreeItemUi';
 // }
 
 export default function TreeViewer({ data }) {
+    const [dataArr, setDataArr] = useState(undefined)
     const [treeData, setTreeData] = useState(undefined)
 
     // Init and add root element
@@ -23,13 +24,15 @@ export default function TreeViewer({ data }) {
             // Check existing root node
             if (arr.find(el => !el.parentId)) {
                 arr.push({ id: 0, name: 'root', parentId: null })
-                setTreeData(arr)
+                setDataArr(arr)
             }
         }
     }, [data])
 
     useEffect(() => {
-    }, [treeData])
+        if (dataArr)
+            setTreeData(nest(dataArr)[0])
+    }, [dataArr])
 
     // TODO: check node object (Typescript)
     // TODO: check unique IDs
@@ -39,10 +42,10 @@ export default function TreeViewer({ data }) {
     // TODO: removeNode function
 
     const labelChangeHandler = ({ nodeId, parentId, value }) => {
-        const arr = [...treeData]
+        const arr = [...dataArr]
         const foundIndex = arr.findIndex(item => item.id === nodeId);
         arr[foundIndex].name = value
-        setTreeData(arr)
+        setDataArr(arr)
     }
 
     const labelClickHandler = (event) =>
@@ -77,7 +80,7 @@ export default function TreeViewer({ data }) {
                     defaultExpanded={['root']}
                     defaultExpandIcon={<ChevronRightIcon />}
                 >
-                    {renderTree(nest(treeData)[0])}
+                    {renderTree(treeData)}
                 </TreeView>
             }
         </>
