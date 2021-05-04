@@ -6,8 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
-import { indigo } from '@material-ui/core/colors';
-import { red } from '@material-ui/core/colors';
 
 // interface INode {
 //     id: number,
@@ -22,12 +20,6 @@ const useStyles = makeStyles({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    btnAdd: {
-        color: indigo[500],
-    },
-    btnRemove: {
-        color: red[500],
-    }
 });
 
 export default function TreeItemUi({ nodeId, label, parentId, children, labelChangeHandler }) {
@@ -48,10 +40,10 @@ export default function TreeItemUi({ nodeId, label, parentId, children, labelCha
                 <div className={classes.itemRow}>
                     <TextField size='small' value={label} onChange={(event) => labelChangeHandler({ nodeId, parentId, value: event.target.value })} />
                     <div>
-                        <IconButton className={classes.btnAdd} size='small' onClick={addHandler} >
+                        <IconButton size='small' onClick={addHandler} >
                             <AddIcon />
                         </IconButton>
-                        <IconButton className={classes.btnRemove} size='small' onClick={removeHandler} >
+                        <IconButton size='small' onClick={removeHandler} >
                             <DeleteOutlineIcon />
                         </IconButton>
                     </div>
