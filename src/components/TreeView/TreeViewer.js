@@ -40,14 +40,13 @@ export default function TreeViewer({ data }) {
 
     const labelChangeHandler = ({ nodeId, parentId, value }) => {
         const arr = [...treeData]
-        const foundIndex = treeData.findIndex(item => item.id === nodeId);
+        const foundIndex = arr.findIndex(item => item.id === nodeId);
         arr[foundIndex].name = value
         setTreeData(arr)
     }
 
-    const labelClickHandler = (event) => {
+    const labelClickHandler = (event) =>
         event.preventDefault()
-    }
 
     const nest = (items, id = null, link = 'parentId') =>
         items
