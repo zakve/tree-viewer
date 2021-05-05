@@ -20,17 +20,16 @@ const useStyles = makeStyles({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
+    addBtn: {
+        color: '#64b5f6'
+    },
+    removeBtn: {
+        color: '#e57373'
+    }
 });
 
-export default function TreeItemUi({ nodeId, label, parentId, children, labelChangeHandler }) {
+export default function TreeItemUi({ nodeId, label, parentId, children, labelChangeHandler, addNodeHandler, removeNodeHandler }) {
     const classes = useStyles();
-
-    const addHandler = () => {
-        console.log('add')
-    }
-    const removeHandler = () => {
-        console.log('remove')
-    }
 
     return (
         <TreeItem
@@ -40,12 +39,15 @@ export default function TreeItemUi({ nodeId, label, parentId, children, labelCha
                 <div className={classes.itemRow}>
                     <TextField size='small' value={label} onChange={(event) => labelChangeHandler({ nodeId, parentId, value: event.target.value })} />
                     <div>
-                        <IconButton size='small' onClick={addHandler} >
+                        <IconButton className={classes.addBtn} size='small' onClick={() => addNodeHandler({ nodeId })} >
                             <AddIcon />
                         </IconButton>
-                        <IconButton size='small' onClick={removeHandler} >
-                            <DeleteOutlineIcon />
-                        </IconButton>
+                        {
+                            nodeId > 0 &&
+                            <IconButton className={classes.removeBtn} size='small' onClick={() => removeNodeHandler({ nodeId, parentId })} >
+                                <DeleteOutlineIcon />
+                            </IconButton>
+                        }
                     </div>
                 </div>
             }>

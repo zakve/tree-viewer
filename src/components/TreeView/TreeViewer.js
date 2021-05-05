@@ -16,6 +16,7 @@ import TreeItemUi from '../TreeItemUi';
 export default function TreeViewer({ data }) {
     const [dataArr, setDataArr] = useState(undefined)
     const [treeData, setTreeData] = useState(undefined)
+    const [maxId, setMaxId] = useState(0)
 
     // Init and add root element
     useEffect(() => {
@@ -30,16 +31,25 @@ export default function TreeViewer({ data }) {
     }, [data])
 
     useEffect(() => {
-        if (dataArr)
+        let max = 0
+        const nest = (items, id = null, link = 'parentId') =>
+            items
+                .filter(item => item[link] === id)
+                .map(item => {
+                    if (item.id > max)
+                        max = item.id
+                    return { ...item, children: nest(items, item.id) }
+                })
+
+        if (dataArr) {
             setTreeData(nest(dataArr)[0])
+            setMaxId(max)
+        }
     }, [dataArr])
 
     // TODO: check node object (Typescript)
     // TODO: check unique IDs
     // TODO: check if parent exist
-    // TODO: changeNodeLabel function
-    // TODO: addNode function
-    // TODO: removeNode function
 
     const labelChangeHandler = ({ nodeId, parentId, value }) => {
         const arr = [...dataArr]
@@ -48,13 +58,19 @@ export default function TreeViewer({ data }) {
         setDataArr(arr)
     }
 
+    const addNodeHandler = ({ nodeId }) => {
+        setDataArr(dataArr => [...dataArr, { id: maxId + 1, name: `Item no. ${maxId + 1}`, parentId: nodeId }])
+        setMaxId(maxId + 1)
+    }
+
+    const removeNodeHandler = ({ nodeId }) => {
+        const filtered = dataArr.filter(node => node.id !== nodeId)
+        setDataArr(filtered)
+    }
+
     const labelClickHandler = (event) =>
         event.preventDefault()
 
-    const nest = (items, id = null, link = 'parentId') =>
-        items
-            .filter(item => item[link] === id)
-            .map(item => ({ ...item, children: nest(items, item.id) }));
 
     const renderTree = (nodes) => {
         return (
@@ -65,6 +81,8 @@ export default function TreeViewer({ data }) {
                 parentId={nodes.parentId}
                 labelChangeHandler={labelChangeHandler}
                 onLabelClick={labelClickHandler}
+                addNodeHandler={addNodeHandler}
+                removeNodeHandler={removeNodeHandler}
             >
                 {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
             </TreeItemUi>
